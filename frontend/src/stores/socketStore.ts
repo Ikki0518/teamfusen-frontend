@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { io, Socket } from 'socket.io-client';
 import { useAuthStore } from './authStore';
+import { config } from '@/lib/config';
 
 interface SocketState {
   socket: Socket | null;
@@ -20,7 +21,7 @@ export const useSocketStore = create<SocketState>((set, get) => ({
     const token = useAuthStore.getState().token;
     if (!token) return;
 
-    const socket = io('/', {
+    const socket = io(config.socketUrl, {
       auth: { token },
       reconnection: true,
       reconnectionDelay: 1000,
