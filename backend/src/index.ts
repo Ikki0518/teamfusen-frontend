@@ -37,7 +37,7 @@ app.use('/api/tasks', taskRoutes);
 app.use('/api/members', memberRoutes);
 
 // Health check
-app.get('/api/health', (req, res) => {
+app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 

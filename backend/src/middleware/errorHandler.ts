@@ -13,40 +13,44 @@ export class AppError extends Error {
 
 export function errorHandler(
   err: Error,
-  req: Request,
+  _req: Request,
   res: Response,
-  next: NextFunction
-) {
+  _next: NextFunction
+): void {
   console.error('Error:', err);
 
   if (err instanceof AppError) {
-    return res.status(err.statusCode).json({
+    res.status(err.statusCode).json({
       error: err.message,
       status: 'error',
     });
+    return;
   }
 
   // PostgreSQLのエラー
   if ((err as any).code === '23505') {
-    return res.status(409).json({
+    res.status(409).json({
       error: 'Duplicate entry',
       status: 'error',
     });
+    return;
   }
 
   // JWTエラー
   if (err.name === 'JsonWebTokenError') {
-    return res.status(401).json({
+    res.status(401).json({
       error: 'Invalid token',
       status: 'error',
     });
+    return;
   }
 
   if (err.name === 'TokenExpiredError') {
-    return res.status(401).json({
+    res.status(401).json({
       error: 'Token expired',
       status: 'error',
     });
+    return;
   }
 
   // デフォルトのエラーレスポンス

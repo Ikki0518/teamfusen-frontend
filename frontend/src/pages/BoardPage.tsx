@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { Plus, Settings, Users, ArrowLeft } from 'lucide-react';
 import api from '@/lib/api';
 import toast from 'react-hot-toast';
@@ -291,7 +291,7 @@ export default function BoardPage() {
               
               {/* ドロップ可能エリア：droppableIdをstatusと同じにすることで、handleDragEndで判別 */}
               <Droppable droppableId={status}>
-                {(provided, snapshot) => (
+                {(provided: any, snapshot: any) => (
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
@@ -308,7 +308,7 @@ export default function BoardPage() {
                         draggableId={`task-${task.id}`}
                         index={index}
                       >
-                        {(provided, snapshot) => (
+                        {(provided: any, snapshot: any) => (
                           <div
                             ref={provided.innerRef}
                             {...provided.draggableProps}

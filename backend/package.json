@@ -6,10 +6,11 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "ls -la && ls -la dist/ && node ./dist/index.js",
     "db:migrate": "tsx src/db/migrate.ts",
     "db:seed": "tsx src/db/seed.ts",
-    "test": "jest"
+    "test": "jest",
+    "vercel-build": "echo 'No build needed for serverless function'"
   },
   "dependencies": {
     "express": "^4.19.2",

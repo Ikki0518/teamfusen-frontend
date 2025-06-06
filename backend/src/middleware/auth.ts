@@ -13,12 +13,13 @@ export async function authenticate(
   req: AuthRequest,
   res: Response,
   next: NextFunction
-) {
+): Promise<void> {
   try {
     const token = req.headers.authorization?.split(' ')[1];
     
     if (!token) {
-      return res.status(401).json({ error: 'No token provided' });
+      res.status(401).json({ error: 'No token provided' });
+      return;
     }
     
     const decoded = jwt.verify(
@@ -33,7 +34,8 @@ export async function authenticate(
     );
     
     if (result.rows.length === 0) {
-      return res.status(401).json({ error: 'User not found' });
+      res.status(401).json({ error: 'User not found' });
+      return;
     }
     
     req.user = {
@@ -44,7 +46,8 @@ export async function authenticate(
     next();
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {
-      return res.status(401).json({ error: 'Invalid token' });
+      res.status(401).json({ error: 'Invalid token' });
+      return;
     }
     
     console.error('Authentication error:', error);
@@ -57,13 +60,14 @@ export async function checkBoardMember(
   req: AuthRequest,
   res: Response,
   next: NextFunction
-) {
+): Promise<void> {
   try {
     const boardId = req.params.boardId || req.body.boardId;
     const userId = req.user?.id;
     
     if (!boardId || !userId) {
-      return res.status(400).json({ error: 'Invalid request' });
+      res.status(400).json({ error: 'Invalid request' });
+      return;
     }
     
     const result = await pool.query(
@@ -72,7 +76,8 @@ export async function checkBoardMember(
     );
     
     if (result.rows.length === 0) {
-      return res.status(403).json({ error: 'Not a board member' });
+      res.status(403).json({ error: 'Not a board member' });
+      return;
     }
     
     // roleをリクエストに追加
@@ -90,13 +95,14 @@ export async function checkBoardAdmin(
   req: AuthRequest,
   res: Response,
   next: NextFunction
-) {
+): Promise<void> {
   try {
     const boardId = req.params.boardId || req.body.boardId;
     const userId = req.user?.id;
     
     if (!boardId || !userId) {
-      return res.status(400).json({ error: 'Invalid request' });
+      res.status(400).json({ error: 'Invalid request' });
+      return;
     }
     
     const result = await pool.query(
@@ -105,12 +111,14 @@ export async function checkBoardAdmin(
     );
     
     if (result.rows.length === 0) {
-      return res.status(403).json({ error: 'Not a board member' });
+      res.status(403).json({ error: 'Not a board member' });
+      return;
     }
     
     const role = result.rows[0].role;
     if (role !== 'owner' && role !== 'admin') {
-      return res.status(403).json({ error: 'Admin access required' });
+      res.status(403).json({ error: 'Admin access required' });
+      return;
     }
     
     next();

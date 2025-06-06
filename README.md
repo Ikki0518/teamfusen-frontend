@@ -75,6 +75,43 @@ cd frontend
 npm run dev
 ```
 
+## デプロイ
+
+### Vercelへのデプロイ
+
+このプロジェクトはVercelで簡単にデプロイできます。
+
+#### 前提条件
+- PostgreSQLデータベース（NeonやSupabaseなど）
+- Vercelアカウント
+
+#### デプロイ手順
+
+1. GitHubリポジトリをVercelに接続
+
+2. 環境変数を設定（Vercelダッシュボード）:
+```
+NODE_ENV=production
+DATABASE_URL=postgresql://username:password@host:port/database_name
+JWT_SECRET=your-super-secret-jwt-key
+JWT_EXPIRES_IN=7d
+FRONTEND_URL=https://your-app.vercel.app
+```
+
+3. データベースマイグレーション実行:
+```bash
+# ローカルで実行（DATABASE_URLを本番用に設定）
+cd backend
+npm run db:migrate
+```
+
+4. Vercelでデプロイ実行
+
+#### 設定ファイル
+- `vercel.json`: フロントエンド（Vite）とバックエンド（API関数）の設定
+- バックエンドは`backend/api/index.ts`で実行
+- フロントエンドは`frontend/dist`から配信
+
 ## ライセンス
 
 MIT

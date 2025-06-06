@@ -164,7 +164,6 @@ router.put('/:boardId/members/:memberId', authenticate, checkBoardAdmin, async (
 router.delete('/:boardId/members/:memberId', authenticate, checkBoardAdmin, async (req: AuthRequest, res, next) => {
   try {
     const { boardId, memberId } = req.params;
-    const userId = req.user!.id;
 
     // ownerは削除できない
     const memberResult = await pool.query(
